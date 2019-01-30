@@ -1,6 +1,6 @@
 # Minoritetsordlistan
 
-## Installl
+## Install
 
 `npm` or `yarn` is needed to run this project
 
