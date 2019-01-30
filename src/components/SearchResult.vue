@@ -1,7 +1,7 @@
 <template>
   <div class="row search-results">
     <div class="col-12">
-      <div class="row entry" v-for="(entry, idx) in globals.hot.entries" v-b-toggle="'additionalInfo' + idx">
+      <div class="row entry" v-for="(entry, idx) in entries" v-b-toggle="'additionalInfo' + idx">
         <div class="col">
           <div variant="primary" class="primary-info row">
             <div class="col-12">
@@ -35,7 +35,7 @@
           Inga träffar
         </div>
       </div>
-      <div v-if="globals.hot.overflow" class="row overflow">
+      <div v-if="overflow" class="row overflow">
         <div class="col-12">
           Hela sökningen kan inte visas.
         </div>
@@ -45,10 +45,13 @@
 </template>
 
 <script>
-import mix from '../mix'
 export default {
-  mixins: [mix],
   name: 'SearchResult',
+  props: [
+    'entries',
+    'overflow',
+    'searching'
+  ],
   data () {
     return {
     }
@@ -75,9 +78,8 @@ export default {
   },
   computed: {
     noResults () {
-      return this.globals.hot.entries.length == 0 
-          && this.globals.hot.subtype !== ''
-          && !this.globals.hot.searching
+      return this.entries.length == 0 
+          && !this.searching
     }
   }
 }

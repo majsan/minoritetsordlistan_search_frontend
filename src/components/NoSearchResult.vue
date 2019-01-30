@@ -16,9 +16,7 @@
 </template>
 
 <script>
-import mix from '../mix'
 export default {
-  mixins: [mix],
   name: 'NoSearchResult',
   data () {
     return {

@@ -58,7 +58,7 @@
           <input type="search" autocorrect="off" autocapitalize="off" spellcheck="false" 
                  @keyup="checkEnter" @input="debounceQuery" v-model="modelQuery" 
                  :placeholder="placeholder" class="mr-2"/>
-          <icon v-if="globals.hot.searching" name="spinner" pulse></icon>
+          <icon v-if="searching" name="spinner" pulse></icon>
         </div>
       </div>
     </div>
@@ -68,28 +68,41 @@
 
 <script>
 
-import mix from '../mix'
 import Backend from '../services/backend'
 import config from '../config'
 
 export default {
-  mixins: [mix],
   name: 'SearchInput',
-  components: { },
+  props: {
+    searchState: {
+      type: Object
+    },
+    searching: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
-      query: decodeURI(this.globals.hot.query),
-      modelQuery: decodeURI(this.globals.hot.query),
-      searchLang: this.globals.hot.searchLang,
-      lexicon: this.globals.hot.lexicon,
-      selectedSubtypes: _.compact(decodeURI(this.globals.hot.subtype).split(',')),
-      selectedSubtypesModel: _.compact(decodeURI(this.globals.hot.subtype).split(',')),
+      query: decodeURI(this.searchState.query),
+      modelQuery: decodeURI(this.searchState.query),
+      searchLang: this.searchState.searchLang,
+      lexicon: this.searchState.lexicon,
+      selectedSubtypes: _.compact(decodeURI(this.searchState.subtype).split(',')),
+      selectedSubtypesModel: _.compact(decodeURI(this.searchState.subtype).split(',')),
       availableSearchLangs: config.languages,
       placeholder: 'Mata in ett sökuttryck',
       availableSubtypes: [],
       subtypeSearch: '',
-      searchType: this.globals.hot.searchType,
-      lexToLang: config.lexToLang()
+      searchType: this.searchState.searchType,
+      lexToLang: config.lexToLang(),
+      translations: {
+        'swe': 'Svenska',
+        'fin': 'Finska',
+        'yid': 'Jiddisch',
+        'rom': 'Romani',
+        'fit': 'Meänkieli'
+      }
     }
   },
   methods: {
@@ -123,6 +136,9 @@ export default {
     },
     deselectAllSubtypes () {
       this.selectedSubtypesModel = []
+    },
+    loc (lang) {
+      return this.translations[lang]
     }
   },
   computed: {
@@ -139,26 +155,26 @@ export default {
     }
   },
   created() {
-    Backend.getCategories(this.globals.hot.lexicon).then(response => {
+    Backend.getCategories(this.lexicon).then(response => {
       this.availableSubtypes = response
     })
   },
   watch: {
     compoundSearch () {
-      this.update([
-        {param: 'query', value: encodeURI(this.query), preventAction: true},
-        {param: 'subtype', value: encodeURI(this.selectedSubtypes.join(',')), preventAction: true},
-        {param: 'lexicon', value: this.lexicon, preventAction: true},
-        {param: 'searchType', value: this.searchType, preventAction: true},
-        {param: 'searchLang', value: this.searchLang}
-      ])
+      this.$emit('update', {
+        query: encodeURI(this.query),
+        subtype: encodeURI(this.selectedSubtypes.join(',')),
+        lexicon: this.lexicon,
+        searchType: this.searchType,
+        searchLang: this.searchLang
+      })
     },
     lexicon () {
       Backend.getCategories(this.lexicon).then(response => {
         this.availableSubtypes = response
       })
       if (this.selectedSubtypes.length == 0) {
-        this.update({param: 'lexicon', value: this.lexicon})
+        this.$emit('update', {lexicon: this.lexicon})
       } else {
         this.selectedSubtypes = []
         this.selectedSubtypesModel = []

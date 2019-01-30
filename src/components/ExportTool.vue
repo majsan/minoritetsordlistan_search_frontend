@@ -7,11 +7,14 @@
 </template>
 
 <script>
-import mix from '../mix'
 import Backend from '../services/backend'
 export default {
-  mixins: [mix],
   name: 'ExportTool',
+  props: {
+    searchState: {
+      type: Object
+    }
+  },
   data () {
     return {
       query: ''
@@ -20,11 +23,11 @@ export default {
   computed: {
     htmlLink () {
       return Backend.getHTMLCall(
-        this.globals.hot.query, 
-        this.globals.hot.subtype,
-        this.globals.hot.searchLang,
-        this.globals.hot.lexicon,
-        this.globals.hot.searchType
+        this.searchState.query, 
+        this.searchState.subtype,
+        this.searchState.searchLang,
+        this.searchState.lexicon,
+        this.searchState.searchType
       )
     }
   }
