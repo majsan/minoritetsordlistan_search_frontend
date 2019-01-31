@@ -41,17 +41,17 @@
         </div>
       </div>
       <div class="row align-items-center text-search">
-        <div class="col-1 p-0 pl-1">
+        <div class="col-1 p-0 pl-1 pl-md-3 col-md-auto pr-md-2">
           <div>
             <icon name="search" class="search-icon"></icon>
           </div>
         </div>
-        <div class="col-10 p-0">
+        <div class="col-10 p-0 col-md-11">
           <input type="search" autocorrect="off" autocapitalize="off" spellcheck="false" 
                  @keyup="checkEnter" @input="debounceQuery" v-model="modelQuery" 
                  :placeholder="placeholder" class="form-control form-control-lg"/>
         </div>
-        <div class="spinner col-1 p-0 pl-1" v-show="searching">
+        <div class="spinner col-1 p-0 pl-1 col-md-auto pl-md-3" v-show="searching">
           <icon name="spinner" pulse></icon>
         </div>
       </div>

@@ -12,7 +12,7 @@
         </div>
       </div>
     </div>
-    <div class="row justify-content-center">
+    <div class="row justify-content-center justify-content-md-start">
       <div class="col-auto">
         <button class="btn btn-mine btn-md mr-2 mb-2" @click="selectAllSubtypes">Markera alla</button>
         <button class="btn btn-mine btn-md mb-2" @click="deselectAllSubtypes">Avmarkera alla</button>
