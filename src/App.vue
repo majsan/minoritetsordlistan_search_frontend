@@ -4,10 +4,9 @@
     <template v-if="!showSubtype">
       <Header @showSearch="showSearch = true" @hideSearch="showSearch = false"/>
       <template v-if="showSearch">
-        <SearchInput @update="update" :searchState="searchState" :searching="searching" @showSubtype="showSubtypeHandler"/>
-        <SearchResult v-if="searchState.subtype !== ''" :entries="entries" :overflow="overflow" :searching="searching"/>
+        <SearchInput @update="update" :searchState="searchState" @showSubtype="showSubtypeHandler"/>
+        <SearchResult v-if="searchState.subtype !== ''" @update="update" :searchState="searchState" :entries="entries" :overflow="overflow" :searching="searching"/>
         <NoSearchResult v-if="searchState.subtype === ''"/>
-        <ExportTool :searchState="searchState"/>
       </template>
     </template>
   </div>
@@ -15,19 +14,19 @@
 
 <script>
 
+import $ from 'jquery'
 import Backend from './services/backend'
 import SearchInput from './components/SearchInput'
 import SearchResult from './components/SearchResult'
 import NoSearchResult from './components/NoSearchResult'
 import Header from './components/Header'
-import ExportTool from './components/ExportTool'
 import SelectSubtype from './components/SelectSubtype'
 import config from './config'
 
 export default {
   name: 'app',
   components: {
-    SearchInput, SearchResult, ExportTool, NoSearchResult, Header, SelectSubtype
+    SearchInput, SearchResult, NoSearchResult, Header, SelectSubtype
   },
   data () {
     return {

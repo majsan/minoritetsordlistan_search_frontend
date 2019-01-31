@@ -1,6 +1,6 @@
 <template>
-  <div class="row">
-    <div class="col-auto ml-auto">
+  <div class="export-row">
+    <div>
       <a :href="htmlLink" target="_blank"><icon name="code"></icon></a>
     </div>
   </div>
@@ -35,5 +35,9 @@ export default {
 </script>
 
 <style scoped>
-
+.export-row {
+  bottom: 0px;
+  right: 10px;
+  position: absolute;
+}
 </style>
