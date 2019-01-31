@@ -125,18 +125,25 @@ export default {
   white-space: nowrap;
   overflow: hidden;
 }
-.subtype.selected .check, .subtype:hover .check {
+.subtype.selected .check {
   color: hsl(188, 53%, 42%)
 }
+/*@media (hover: hover) {
+  .subtype:hover .check {
+    color: hsl(188, 53%, 55%)
+  }
+}*/
 .subtype .check {
   color: hsl(188, 53%, 88%)
 }
 .subtype.selected {
   background-color: hsl(188, 53%, 70%);
 }
-.subtype:hover {
-  background-color: hsl(188, 53%, 88%);
-}
+/*@media (hover: hover) {
+  .subtype:hover {
+    background-color: hsl(188, 53%, 88%);
+  }
+}*/
 .form-control:focus {
   border-color: hsl(188, 53%, 70%);
   box-shadow: inset 0 1px 1px hsl(188, 53%, 70%), 0 0 8px hsl(188, 53%, 70%);
