@@ -46,16 +46,25 @@ export default {
       window.history.back()
     },
     showInfo () {
+      if (this.showingHelp) {
+        window.history.replaceState({}, "infohelp", window.location)
+      } else {
+        window.history.pushState({}, "infohelp", window.location)
+        this.$emit('hideSearch')
+      }
       this.showingInfo = true
       this.showingHelp = false
       this.$emit('hideSearch')
-      window.history.pushState({}, "infohelp", window.location)
     },
     showHelp () {
+      if (this.showingInfo) {
+        window.history.replaceState({}, "infohelp", window.location)
+      } else {
+        window.history.pushState({}, "infohelp", window.location)
+        this.$emit('hideSearch')
+      }
       this.showingHelp = true
       this.showingInfo = false
-      this.$emit('hideSearch')
-      window.history.pushState({}, "infohelp", window.location)
     }
   },
   created () {
