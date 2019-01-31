@@ -28,7 +28,6 @@
 
 <script>
 
-// import '../assets/style.css'
 import infoContent from '../assets/info.html'
 import helpContent from '../assets/help.html'
 

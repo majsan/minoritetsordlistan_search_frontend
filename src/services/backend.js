@@ -70,10 +70,7 @@ class Backend {
           mode: lexicon
         }
       }).then(response => {
-        const data = _.map(response.data.subtypes, (item) => { 
-          return { 'text': item, 'value': item }
-        })
-        resolve(data)
+        resolve(response.data.subtypes)
       }, response => {
         console.log("failure.", response)
         reject(response)

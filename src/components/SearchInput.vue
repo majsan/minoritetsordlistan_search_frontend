@@ -25,19 +25,7 @@
       </div>
       <div class="row">
         <div class="col-auto">
-          <b-dropdown text="Välj sakområde" class="mb-2" toggle-class="dropdown-btn-mine" @hide="closeDropdown()">
-            <!-- .bg-white and .text-body suppress .dropdown-item.active and .dropdown-item:active styles -->
-            <div class="dropdown-item bg-white text-body">
-              <span class="small-btn mr-2" @click="selectAllSubtypes">Markera alla</span>
-              <span class="small-btn" @click="deselectAllSubtypes">Avmarkera alla</span>
-            </div>
-            <div class="dropdown-item bg-white text-body" v-if="availableSubtypes.length >= 25">
-              <input type="text" v-$model="subtypeSearch" placeholder="Filtrera sakområden">
-            </div>
-            <div class="dropdown-item bg-white text-body">
-              <b-form-checkbox-group stacked v-model="selectedSubtypesModel" name="subtypes" :options="options"/>
-            </div>
-          </b-dropdown>
+          <button class="btn dropdown-btn-mine" @click="$emit('showSubtype')">Välj sakområde</button>
         </div>
         <div class="col-auto pd-0">
           <b-form-radio-group id="searchTypeRadio" v-model="searchType" name="searchTypeRadio" stacked>
@@ -49,16 +37,22 @@
 
       <div class="row selected-subtypes">
         <div class="col-12">
-          <span class="font-weight-bold">Valda sakområden:</span> {{selectedSubtypes.join(', ')}}
+          <span class="font-weight-bold">Valda sakområden:</span> {{selectedSubtypes}}
         </div>
       </div>
-      <div class="row">
-        <div class="col-12 text-search">
-          <icon name="search" class="search-icon"></icon>
+      <div class="row align-items-center text-search">
+        <div class="col-1 p-0 pl-1">
+          <div>
+            <icon name="search" class="search-icon"></icon>
+          </div>
+        </div>
+        <div class="col-10 p-0">
           <input type="search" autocorrect="off" autocapitalize="off" spellcheck="false" 
                  @keyup="checkEnter" @input="debounceQuery" v-model="modelQuery" 
-                 :placeholder="placeholder" class="mr-2"/>
-          <icon v-if="searching" name="spinner" pulse></icon>
+                 :placeholder="placeholder" class="form-control form-control-lg"/>
+        </div>
+        <div class="spinner col-1 p-0 pl-1" v-show="searching">
+          <icon name="spinner" pulse></icon>
         </div>
       </div>
     </div>
@@ -88,12 +82,8 @@ export default {
       modelQuery: decodeURI(this.searchState.query),
       searchLang: this.searchState.searchLang,
       lexicon: this.searchState.lexicon,
-      selectedSubtypes: _.compact(decodeURI(this.searchState.subtype).split(',')),
-      selectedSubtypesModel: _.compact(decodeURI(this.searchState.subtype).split(',')),
       availableSearchLangs: config.languages,
       placeholder: 'Mata in ett sökuttryck',
-      availableSubtypes: [],
-      subtypeSearch: '',
       searchType: this.searchState.searchType,
       lexToLang: config.lexToLang(),
       translations: {
@@ -122,20 +112,10 @@ export default {
     debounceQuery: _.debounce(function (e) {
       this.query = e.target.value
     }, 300),
-    closeDropdown () {
-      this.selectedSubtypes = this.selectedSubtypesModel
-      this.subtypeSearch = ''
-    },
     checkEnter: function(e) {
       if(e.keyCode == 13) {
           e.target.blur()
       }
-    },
-    selectAllSubtypes () {
-      this.selectedSubtypesModel = _.map(this.options, (elem) => elem.value)
-    },
-    deselectAllSubtypes () {
-      this.selectedSubtypesModel = []
     },
     loc (lang) {
       return this.translations[lang]
@@ -143,42 +123,23 @@ export default {
   },
   computed: {
     compoundSearch () {
-      return [this.query, this.selectedSubtypes, this.searchLang, this.searchType].join()
-    },
-    options () {
-      return _.filter(this.availableSubtypes, subtype => {
-        return _.includes(subtype.value.toLowerCase(), this.subtypeSearch.toLowerCase())
-      })
+      return [this.query, this.searchLang, this.searchType, this.lexicon].join()
     },
     targetLang () {
       return this.lexToLang[this.lexicon]
+    },
+    selectedSubtypes () {
+      return decodeURI(this.searchState.subtype).split(',').join(', ')
     }
-  },
-  created() {
-    Backend.getCategories(this.lexicon).then(response => {
-      this.availableSubtypes = response
-    })
   },
   watch: {
     compoundSearch () {
       this.$emit('update', {
         query: encodeURI(this.query),
-        subtype: encodeURI(this.selectedSubtypes.join(',')),
         lexicon: this.lexicon,
         searchType: this.searchType,
         searchLang: this.searchLang
       })
-    },
-    lexicon () {
-      Backend.getCategories(this.lexicon).then(response => {
-        this.availableSubtypes = response
-      })
-      if (this.selectedSubtypes.length == 0) {
-        this.$emit('update', {lexicon: this.lexicon})
-      } else {
-        this.selectedSubtypes = []
-        this.selectedSubtypesModel = []
-      }
     }
   }
 }
@@ -187,10 +148,11 @@ export default {
 <style>
 .text-search {
   background-color: hsl(0, 0%, 95%);
-  padding: 7px;
+  padding-top: 7px;
+  padding-bottom: 7px;
 }
-.search-icon {
-  margin-right: 7px;
+.spinner {
+  padding: 0px !important;
 }
 .search-icon * {
   color: hsl(0, 0%, 85%);
@@ -227,7 +189,12 @@ export default {
 }
 .custom-control-input:checked ~ .custom-control-label::before {
     color: #fff;
+    border-color: rgb(138, 208, 219) !important;
     background-color: rgb(138, 208, 219) !important;
+}
+.form-control:focus {
+  border-color: hsl(188, 53%, 70%) !important;
+  box-shadow: inset 0 1px 1px hsl(188, 53%, 70%), 0 0 8px hsl(188, 53%, 70%) !important;
 }
 .lang-switch {
   color: hsl(0, 0%, 75%);
@@ -249,8 +216,5 @@ export default {
   background-color: hsl(0, 0%, 90%);
   font-size: 0.8em;
   margin-top: 15px;
-}
-.small-btn {
-  cursor: pointer;
 }
 </style>

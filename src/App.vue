@@ -1,11 +1,14 @@
 <template>
   <div id="app" class="container">
-    <Header @showSearch="showSearch = true" @hideSearch="showSearch = false"/>
-    <template v-if="showSearch">
-      <SearchInput @update="update" :searchState="searchState" :searching="searching"/>
-      <SearchResult v-if="searchState.subtype !== ''" :entries="entries" :overflow="overflow" :searching="searching"/>
-      <NoSearchResult v-if="searchState.subtype === ''"/>
-      <ExportTool :searchState="searchState"/>
+    <SelectSubtype v-if="showSubtype" :searchState="searchState" :showSubtype="showSubtype" @hideSubtype="hideSubtypeHandler"/>
+    <template v-if="!showSubtype">
+      <Header @showSearch="showSearch = true" @hideSearch="showSearch = false"/>
+      <template v-if="showSearch">
+        <SearchInput @update="update" :searchState="searchState" :searching="searching" @showSubtype="showSubtypeHandler"/>
+        <SearchResult v-if="searchState.subtype !== ''" :entries="entries" :overflow="overflow" :searching="searching"/>
+        <NoSearchResult v-if="searchState.subtype === ''"/>
+        <ExportTool :searchState="searchState"/>
+      </template>
     </template>
   </div>
 </template>
@@ -18,12 +21,13 @@ import SearchResult from './components/SearchResult'
 import NoSearchResult from './components/NoSearchResult'
 import Header from './components/Header'
 import ExportTool from './components/ExportTool'
+import SelectSubtype from './components/SelectSubtype'
 import config from './config'
 
 export default {
   name: 'app',
   components: {
-    SearchInput, SearchResult, ExportTool, NoSearchResult, Header
+    SearchInput, SearchResult, ExportTool, NoSearchResult, Header, SelectSubtype
   },
   data () {
     return {
@@ -39,15 +43,16 @@ export default {
       searching: false,
       entries: [],
       overflow: false,
-      showSearch: true
+      showSearch: true,
+      showSubtype: false,
     }
   },
   methods: {
     update (newSearchState) {
       this.searchState = Object.assign({}, this.searchState, newSearchState)
       this.createPath()
-      this.search(newSearchState.query, newSearchState.subtype, 
-        newSearchState.searchLang, newSearchState.lexicon, newSearchState.searchType)
+      this.search(this.searchState.query, this.searchState.subtype, 
+        this.searchState.searchLang, this.searchState.lexicon, this.searchState.searchType)
     },
     search (query, subtype, searchLang, lexicon, searchType) {
       if (!subtype) {
@@ -101,6 +106,16 @@ export default {
         } else {
           this.$set(this.searchState, param, this.defaultSearchState[param])
         }
+      })
+    },
+    showSubtypeHandler () {
+      this.showSubtype = true
+      window.history.pushState({}, "subtype", window.location)
+    },
+    hideSubtypeHandler (newSubtypes) {
+      this.showSubtype = false
+      this.update({
+        subtype: encodeURI(newSubtypes.join(','))
       })
     }
   },
