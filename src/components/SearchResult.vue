@@ -65,7 +65,7 @@
           </div>
         </div>
       </div>
-      <ExportTool :searchState="searchState"/>
+      <ExportTool v-if="!noResults" :searchState="searchState"/>
     </div>
   </div>
 </template>
@@ -146,13 +146,16 @@ export default {
 }
 .no-results {
   padding: 10px;
-  background-color: #add8e67a;
+  background-color: rgb(220, 241, 245);
 }
 .entry:nth-child(even){
-  background-color: #add8e67a;
+  background-color: rgb(185, 227, 234);
 }
 .entry:nth-child(odd){
-  background-color: #add8e63b;
+  background-color: rgb(220, 241, 245);
+}
+.search-results {
+  background-color: rgb(220, 241, 245);
 }
 .primary-info {
   display: block;

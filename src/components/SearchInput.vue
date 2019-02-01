@@ -140,8 +140,8 @@ export default {
   margin-bottom: 15px;
 }
 .dropdown-btn-mine {
-  background-color: #8ad0db !important;
-  border-color: #8ad0db !important;
+  background-color: rgb(138, 208, 219) !important;
+  border-color: rgb(138, 208, 219) !important;
   color: hsla(0, 0%, 100%, 0.9) !important;
 }
 .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
