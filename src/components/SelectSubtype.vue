@@ -4,7 +4,7 @@
       <div class="col-12">
         <div class="row menu">
           <div class="col-auto">
-            <span class="clickable" @click="exitButton"><icon name="arrow-left" scale="1.8" style="margin-right: 4px;"></icon></span>
+            <span class="clickable" @click="exitButton"><icon name="arrow-left" scale="1.8"></icon></span>
           </div>
           <div class="col-auto title">
             <h2>Välj sakområde</h2>
@@ -20,7 +20,8 @@
     </div>
     <div class="row">
       <div class="col-12 col-md-6 mb-2">
-        <input type="text" class="form-control form-control-lg" v-$model="subtypeSearch" placeholder="Filtrera sakområden">
+        <input type="text" class="form-control form-control-lg"  v-model="subtypeSearch" v-$model="subtypeSearch" placeholder="Filtrera sakområden">
+        <span class="clickable clear-search" @click="subtypeSearch = ''"><icon name="times" scale="1.8"></icon></span>
       </div>
     </div>
     <div class="row pb-3">
@@ -147,5 +148,14 @@ export default {
 .form-control:focus {
   border-color: hsl(188, 53%, 70%);
   box-shadow: inset 0 1px 1px hsl(188, 53%, 70%), 0 0 8px hsl(188, 53%, 70%);
+}
+.clear-search {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  bottom: 0;
+  height: 24px;
+  margin: auto;
+  color: hsl(0, 0%, 30%);
 }
 </style>
