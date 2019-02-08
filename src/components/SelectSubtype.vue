@@ -3,11 +3,11 @@
     <div class="row">
       <div class="col-12">
         <div class="row menu">
+          <div class="col-auto">
+            <span class="clickable" @click="exitButton"><icon name="arrow-left" scale="1.8" style="margin-right: 4px;"></icon></span>
+          </div>
           <div class="col-auto title">
             <h2>Välj sakområde</h2>
-          </div>
-          <div class="ml-auto col-auto">
-            <span class="clickable" @click="exitButton"><icon name="times" scale="1.8" style="margin-right: 4px;"></icon></span>
           </div>
         </div>
       </div>
@@ -112,7 +112,7 @@ export default {
   font-size: 1.5rem;
 }
 .title {
-  padding-right: 0px;
+  padding-left: 0px;
 }
 .btn-mine {
   background-color: #8ad0db !important;
