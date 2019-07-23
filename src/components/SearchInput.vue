@@ -100,8 +100,10 @@ export default {
         'swe': 'Svenska',
         'fin': 'Finska',
         'yid': 'Jiddisch',
-        'rom': 'Romani',
-        'fit': 'Meänkieli'
+        'kale': 'Kale',
+        'kalderas': 'Kalderaš',
+        'lovari': 'Lovari',
+        'arli': 'Arli'
       }
     }
   },

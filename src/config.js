@@ -1,14 +1,16 @@
 import * as _ from 'lodash'
 
-// To add and remove lexicons, only the list languages must be changed 
+// To add and remove lexicons, only the list of languages must be changed 
 export default {
   backendURL: 'https://ws.spraakbanken.gu.se/ws/minoritetsordlistan',
   languageMap: {
     swe: 'sv',
     fin: 'fi',
     yid: 'yid',
-    rom: 'rom',
-    fit: 'fit'
+    kale: 'rom',
+    kalderas: 'rom',
+    lovari: 'rom',
+    arli: 'rom'
   },
   getLanguage (lang) {
     const newLang = this.languageMap[lang]
@@ -21,14 +23,18 @@ export default {
   languages: [
     'fin'
     // 'yid',
-    // 'rom',
-    // 'fit'
+    // 'kale',
+    // 'kalderas',
+    // 'lovari',
+    // 'arli'
   ],
   lexicons: {
     fin: 'term-swefin',
     yid: 'term-sweyid',
-    rom: 'term-swerom',
-    fit: 'term-swefit',
+    kale: 'term-swekale',
+    kalderas: 'term-swekalderas',
+    lovari: 'term-swelovari',
+    arli: 'term-swearli'
   },
   lexToLang () { return _.invert(this.lexicons) },
   defaultLexicon: 'term-swefin',
